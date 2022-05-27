@@ -30,4 +30,8 @@ public class ToDoService {
 	public void delete(Long itemId) {
 		this.repo.deleteById(itemId);
 	}
+	
+	public ToDo update(ToDo item) {
+		return this.repo.save(item);
+	}
 }

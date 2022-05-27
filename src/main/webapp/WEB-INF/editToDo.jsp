@@ -12,7 +12,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Tacos</title>
+    <title>Edit ToDo</title>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css"> <!-- change to match your file/naming structure -->
     <script src="/webjars/jquery/jquery.min.js"></script>
@@ -20,18 +20,18 @@
 </head>
 <body>
     <!-- POST encodes data whereas GET shows data on Https/SSL -->
-    
     <main id="content">
         <div id="page_header">
             <img src="/images/logo.png">
-            <a href="/todo/add">Add task</a>
+            <a href="/todo/add">Update Todo</a>
         </div>
-            <form:form action="/todo/add" method="POST" modelAttribute="todo"> <!-- this todo here matches the last "todo" in modelAttribute("todo") ToDo todo in the controller-->
+            <form:form action="/todo/update" method="POST" modelAttribute="todo"> <!-- this todo here matches the last "todo" in modelAttribute("todo") ToDo todo in the controller-->
+                <input type="hidden" name="id" value="<c:out value='${todo.id}'/>">
                 <form:label path="text" for="text">Text <!-- path matches the attribute in model.java -->
                     <form:errors path="text"/>
                     <form:input type="text" path="text"/>
                 </form:label>
-                <button>Add</button>
+                <button>Update</button>
             </form:form>
         <div id="active_area">
 

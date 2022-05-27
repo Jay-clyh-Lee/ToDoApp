@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,10 +52,13 @@ public class ToDoController {
 
 	@PostMapping("/todo/add")
 	public String add(
-			@ModelAttribute("todo") ToDo todo,  // @ModelAttribute takes form data and convert them to an object matching the model attributes. That is the reason we need the empty constructor
+			@Valid @ModelAttribute("todo") ToDo todo,  // @ModelAttribute takes form data and convert them to an object matching the model attributes. That is the reason we need the empty constructor
+			BindingResult result,
 //			@RequestParam(value="text") String text,  // we don't need this anymore. Why? ModelAttribute handles all field
 			RedirectAttributes redirectAttributes
 			) {
+		
+		if ( result.hasErrors() ) return "addToDo.jsp";
 		
 		this.service.create(todo);
 		
@@ -132,7 +137,7 @@ public class ToDoController {
 	}
 	
 	// Delete
-	@GetMapping("/todo/delete/{id")
+	@GetMapping("/todo/delete/{id}")
 	public String delete(
 			@PathVariable Long id,
 			RedirectAttributes redirectAttributes
@@ -143,4 +148,33 @@ public class ToDoController {
 		
 		return "redirect:/todo/my";
 	}
+	
+	// Update
+	@GetMapping("/todo/update/{id}")
+	public String update(
+			@PathVariable Long id,
+			Model model
+			) {
+		
+		model.addAttribute("todo", this.service.retrieve(id));
+		
+		return "editToDo.jsp";
+	}
+	
+	@PostMapping("/todo/update/{id}")
+	public String update(
+			@Valid @ModelAttribute("todo") ToDo todo,
+			BindingResult result,
+			RedirectAttributes redirectAttributes
+			) {
+		
+		if ( result.hasErrors() ) return "editToDo.jsp";
+		
+		this.service.update(todo);
+		
+		redirectAttributes.addFlashAttribute("message", "Your ToDo has been deleted.");
+		
+		return "redirect:/todo/my";
+	}
+			
 }

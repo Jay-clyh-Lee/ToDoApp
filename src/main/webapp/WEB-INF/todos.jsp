@@ -29,6 +29,7 @@
                         <td><c:out value="${todo.text}"/></td>
                         <td>
                             <a href="/todo/<c:out value='${todo.id}'/>">view</a>
+                            <a href="/todo/update/<c:out value='${todo.id}'/>">update</a>
                             <a href="/todo/delete/<c:out value='${todo.id}'/>">delete</a>
                         </td>
                     </tr>
